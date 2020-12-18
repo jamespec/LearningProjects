@@ -15,7 +15,6 @@ def spotrac_main(filename: str, yearid: int, franchid: str, debug: bool = False)
                                 'C.C. Sabathia': 'CC Sabathia',
                                 'Tom Layne': 'Tommy Layne',
                                 'D.J. LeMahieu': 'DJ LeMahieu',
-
                                 }
 
     num_bad = 0
