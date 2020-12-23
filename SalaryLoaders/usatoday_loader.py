@@ -30,23 +30,28 @@ def salaries_main(filename: str, yearid: int, debug: bool = False) -> None:
 
         with open(filename, "r") as f:
 
-            # Three lines to a record:
-            #  1) Ignored, the salary rank
-            #  2) Name, full name, first followed by last. May contain initials or suffix
-            #  3) Tab delimited record including franchid, field 0, and salary, field 2
-            while f.readline():
-                name = f.readline().rstrip()
-                data = f.readline().split("\t")
+            # Read and parse rows of the form:
+            #  Yearid, Name, Team Franchise, Salary
+            for line in f:
+                row_fields = line.split('\t')
+
+                year = int(row_fields[0].strip())
+                name = row_fields[1].strip()
+                team = row_fields[2].strip()
+                salary = row_fields[3].strip()
 
                 try:
-                    franchid = franchid_override_map.get(data[0], data[0])
-                    salary = float(data[2].lstrip('$').replace(",", ""))
+                    franchid = franchid_override_map.get(team, team)
+                    salary = float(salary.lstrip('$').replace(",", ""))
 
                     # Look for a name override and remove a training Jr.
                     name = player_name_override_map.get(name, name)
                     names = name.split()
                     if names[-1] == "Jr.":
                         name = "".join(names[:-1])
+
+                    if yearid != year:
+                        raise ValueError("File row year different from command line")
 
                 except Exception as error:
                     # Bad row, ignore and keep going
