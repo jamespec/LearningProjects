@@ -35,6 +35,8 @@ if __name__ == "__main__":
             franchid = team.a.find("span", class_="xs-visible").text
             team_url = team.a['href']
 
+            print("Loading {} from {}".format(franchid, team_url), file=sys.stderr)
+
             team_page = session.get(team_url)
             team_soup = BeautifulSoup(team_page.content, 'html5lib')
 
@@ -51,4 +53,4 @@ if __name__ == "__main__":
 
                     salary = row.find("span", title="Total Adjusted Salary including base salary and bonuses")
                     if salary and salary.text[0] == "$":
-                        print("{}\t{}\t{}\t{}".format(2020, name.text, franchid, salary.text))
+                        print("{}\t{}\t{}\t{}".format(year, name.text, franchid, salary.text))
