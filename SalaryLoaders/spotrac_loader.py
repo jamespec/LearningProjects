@@ -5,7 +5,7 @@ import sys
 from salarydb import SalaryDB
 
 
-def spotrac_main(filename: str, yearid: int, franchid: str, debug: bool = False) -> None:
+def spotrac_main(filename: str, yearid: int, debug: bool = False) -> None:
 
     player_name_override_map = {'Raffy Lopez': 'Rafael Lopez',
                                 'Dwight Smith Jr.': 'Dwight Smith',
@@ -38,20 +38,11 @@ def spotrac_main(filename: str, yearid: int, franchid: str, debug: bool = False)
             for line in input_file:
                 row_fields = line.split('\t')
 
-                # Special case - The injured players have an embedded \n we need to deal with
-                # The name will appear on it's own, we save it.
-                # the next line will have the injury in the name field, we replace it
-                if hold_name:
-                    row_fields[0] = hold_name
-                    hold_name = None
-
-                if len(row_fields) == 1:
-                    hold_name = row_fields[0]
-                    continue
-
                 try:
-                    name = row_fields[0].strip()
-                    salary = float(row_fields[7].lstrip('$').replace(",", ""))
+                    # year = row_fields[0].strip() # Don't use bug, bad value
+                    name = row_fields[1].strip()
+                    franchid = row_fields[2].strip()
+                    salary = float(row_fields[3].lstrip('$').replace(",", ""))
                     name = player_name_override_map.get(name, name)
 
                 except Exception as error:
@@ -81,14 +72,13 @@ def spotrac_main(filename: str, yearid: int, franchid: str, debug: bool = False)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print("Usage: {} <filename> <yearid, e.g. 2018> <franchid, e.g NYY>".format(sys.argv[0]))
+    if len(sys.argv) != 3:
+        print("Usage: {} <filename> <yearid, e.g. 2018>".format(sys.argv[0]))
     else:
         filename = sys.argv[1]
         yearid = int(sys.argv[2])
-        franchid = sys.argv[3]
 
         if not os.access(filename, os.R_OK) or  yearid < 1850:
             print("Parameter error, file not readable or year before 1850")
         else:
-            spotrac_main(filename, yearid, franchid)
+            spotrac_main(filename, yearid)

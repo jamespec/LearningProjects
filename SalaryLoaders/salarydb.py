@@ -114,7 +114,7 @@ class SalaryDB:
             self._nextId -= 1
 
         else:
-            raise LookupError("Player not found in map: " + key)
+            raise LookupError("Player not found in map: {} ({})".format(key, franchid))
 
 
 if __name__ == "__main__":
