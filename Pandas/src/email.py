@@ -8,6 +8,7 @@ Created on Thu Jan  7 22:05:04 2021
 
 import smtplib
 
+
 def send_email(message):
     """send_email - sends an email to the developers describing a bug."""
 
