@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+    <h1>Welcome to a flask application</h1>
+    <p>
+        This is a simple application to follow along with the course
+        <em>Learning Flask</em>
+        on <a href="http://www.pluralsight.com">PluralSight</a>
+    </p>
+    <h2>Players</h2>
+    <p>
+        <ul>
+            {% for salary_record in db %}
+            <li>
+                <a href="{{ url_for('salary_view', index=loop.index0) }}">
+                    {{ salary_record.name }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </p>
+    <br>
+    Views so far {{views}}
+</body>
+</html>
