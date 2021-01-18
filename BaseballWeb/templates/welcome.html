@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block content %}
+    <h1>Welcome to a flask application</h1>
+    <p>
+        This is a simple application to follow along with the course
+        <em>Learning Flask</em>
+        on <a href="http://www.pluralsight.com">PluralSight</a>
+    </p>
+    <h2>Players</h2>
+    <ul>
+        {% for salary_record in db %}
+        <li>
+            <a href="{{ url_for('salary_view', index=loop.index0) }}">
+                {{ salary_record.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('add_salary') }}">Add New Salary</a>
+{% endblock %}
