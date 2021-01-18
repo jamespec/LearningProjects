@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
-
-{% block title %}Welcome!{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <title>Welcome!</title>
+</head>
+<body>
     <h1>Welcome to a flask application</h1>
     <p>
         This is a simple application to follow along with the course
@@ -22,4 +26,5 @@
         </ul>
     </p>
     <a href="{{ url_for('add_salary') }}">Add New Salary</a>
-{% endblock %}
+</body>
+</html>

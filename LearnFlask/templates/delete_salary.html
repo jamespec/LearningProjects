@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Salary{% endblock %}
+
+{% block content %}
+    <h1>Delete Salary</h1>
+    Name: {{ salary_record.name }} <br>
+    Salary: {{ salary_record.salary }}
+    <p>
+        <h1>Are you sure?</h1>
+        <form method="post">
+            <button type="submit">Yes</button>
+            <a href="{{ url_for('welcome_view') }}">Home</a>
+        </form>
+    </p>
+{% endblock %}

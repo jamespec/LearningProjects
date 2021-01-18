@@ -1,8 +1,1 @@
-[
-  { "name":  "Alex Rodriguez",
-    "salary":  "$20,000,000" },
-  { "name":  "Bob Jones",
-    "salary":  "$100,000"},
-  { "name": "William Schaefer",
-    "salary":  "$1,000,000" }
-]
+[{"name": "Alex Rodriguez", "salary": "$20,000,000"}, {"name": "William Schaefer", "salary": "$1,000,000"}, {"name": "James Pecoraro", "salary": "$1,000,000"}, {"name": "Chris Consalvo", "salary": "$1,000,000"}, {"name": "Mary Pecoraro", "salary": "$20,000"}]

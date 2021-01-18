@@ -1,24 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Salary</title>
-    </head>
-    <body>
-        <h1>Salary</h1>
-        Name: {{ salary_record.name }} <br>
-        Salary: {{ salary_record.salary }}
-        <p>
-            <button>
-                <a href="{{ url_for('welcome_view') }}">Home</a>
-            </button>
-            <button>
-                {% if index < max_index %}
-                    <a href="{{ url_for('salary_view', index=index+1) }}">Next Salary</a>
-                {% else %}
-                    <a href="{{ url_for('salary_view', index=0) }}">Start Over</a>
-                {% endif %}
-            </button>
-        </p>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Salary{% endblock %}
+
+{% block content %}
+    <h1>Salary</h1>
+    Name: {{ salary_record.name }} <br>
+    Salary: {{ salary_record.salary }}
+    <p>
+        <button>
+            <a href="{{ url_for('welcome_view') }}">Home</a>
+        </button>
+        <button>
+            {% if index < max_index %}
+                <a href="{{ url_for('salary_view', index=index+1) }}">Next Salary</a>
+            {% else %}
+                <a href="{{ url_for('salary_view', index=0) }}">Start Over</a>
+            {% endif %}
+        </button>
+        <button>
+            <a href="{{ url_for('delete_salary', index=index) }}">Delete</a>
+        </button>
+    </p>
+{% endblock %}
