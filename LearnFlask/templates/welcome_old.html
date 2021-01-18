@@ -14,17 +14,15 @@
         on <a href="http://www.pluralsight.com">PluralSight</a>
     </p>
     <h2>Players</h2>
-    <p>
-        <ul>
-            {% for salary_record in db %}
-            <li>
-                <a href="{{ url_for('salary_view', index=loop.index0) }}">
-                    {{ salary_record.name }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </p>
+    <ul>
+        {% for salary_record in db %}
+        <li>
+            <a href="{{ url_for('salary_view', index=loop.index0) }}">
+                {{ salary_record.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
     <a href="{{ url_for('add_salary') }}">Add New Salary</a>
 </body>
 </html>
