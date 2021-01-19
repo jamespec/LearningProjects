@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/static/style.css">
+        <title>Team {{ teamid }} for {{ year }}</title>
+    </head>
+    <body>
+        <form method="post">
+            <p>
+                TeamId:
+                <input type="text" name="teamid">
+            </p>
+            <p>
+                Year:
+                <input type="text" name="year">
+            </p>
+            <button type="submit">Fetch</button>
+        </form>
+
+        {% if num_players > 0 %}
+            <h1>Team {{ teamid }} for {{ year }}</h1>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th align="left">First Name</th>
+                        <th align="left">Last Name</th>
+                        <th align="right">Birthday</th>
+                        <th align="left">PlayerId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in players %}
+                    <tr>
+                        <td>{{ player.namefirst }}</td>
+                        <td>{{ player.namelast }}</td>
+                        <td align="right">{{ player.birthday }}</td>
+                        <td>{{ player.playerid }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <br/>
+        <button>
+            <a href="{{ url_for('welcome_view') }}">Home</a>
+        </button>
+    </body>
+</html>
