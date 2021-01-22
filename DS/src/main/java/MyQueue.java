@@ -37,4 +37,11 @@ public class MyQueue<T>
         else
             throw new BufferUnderflowException();
     }
+
+    T peek() {
+        if( numEnqueued > 0 )
+            return data[head];
+        else
+            throw new BufferUnderflowException();
+    }
 }

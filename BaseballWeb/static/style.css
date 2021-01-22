@@ -1,6 +1,10 @@
 
 body {
     font-family: sans-serif;
-    color: cornflowerblue;
+    color: red;
     background-color: floralwhite;
+}
+
+head {
+    color: cornflowerblue;
 }

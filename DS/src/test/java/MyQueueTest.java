@@ -2,6 +2,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -45,6 +46,18 @@ public class MyQueueTest
 
         Exception exception = assertThrows(BufferOverflowException.class, () -> {
             q.enqueue(6);
+        });
+    }
+
+    @Test
+    void whenDequeueTooManyThrowsBufferUnderflowException() {
+        q.enqueue(1);
+        q.enqueue(2);
+        q.dequeue();
+        q.dequeue();
+
+        Exception exception = assertThrows(BufferUnderflowException.class, () -> {
+            q.dequeue();
         });
     }
 }

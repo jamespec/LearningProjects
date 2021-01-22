@@ -14,7 +14,7 @@ public class MyLinkedPriorityQueue<T>
         }
     }
 
-    Node<T> head=null;
+    Node<T> head =null;
 
     // Add an item to the Priority Queue by Priority
     // It will be places as the last of a group with the same priority.
@@ -44,7 +44,7 @@ public class MyLinkedPriorityQueue<T>
 
     // Get the value at index
     T peek( int index ) {
-        Node<T> current=head;
+        Node<T> current= head;
         for( int i=0; i<index && current != null; i++ )
             current = current.next;
 
