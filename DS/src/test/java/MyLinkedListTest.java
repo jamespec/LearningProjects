@@ -108,8 +108,8 @@ public class MyLinkedListTest
                 popResults[k] = (endTime2-startTime2);
             }
 
-            long appendAverage = calcAverage(appendResults);
-            long popAverage = calcAverage(popResults);
+            long appendAverage = calcAverageTossHighAndLow(appendResults);
+            long popAverage = calcAverageTossHighAndLow(popResults);
             System.out.println("Average time to insert " +
                     count + ": " + appendAverage/1000000 + " msecs, "
                     + (appendAverage/count)/1000 + " usecs each");
@@ -120,7 +120,13 @@ public class MyLinkedListTest
         }
     }
 
-    long calcAverage( long[] values )
+    @Test
+    void testCalcAverage() {
+        long[] values = { 20,30,40,50,60,10,70,80,90,100};
+        assert( calcAverageTossHighAndLow(values) == 55);
+    }
+
+    long calcAverageTossHighAndLow( long[] values )
     {
         // Throw away the largest and smallest result
         long largest = values[0];
