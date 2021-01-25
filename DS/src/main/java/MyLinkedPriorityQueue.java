@@ -18,7 +18,7 @@ public class MyLinkedPriorityQueue<T>
 
     // Add an item to the Priority Queue by Priority
     // It will be places as the last of a group with the same priority.
-    void add( T v, int priority ) {
+    void enqueue( T v, int priority ) {
         if( head == null || priority < head.priority ) {
             head = new Node<>(v, priority, head);
         }
@@ -32,7 +32,7 @@ public class MyLinkedPriorityQueue<T>
     }
 
     // Return and remove the highest priority item from the Priority Queue.
-    T pull() {
+    T dequeue() {
         if( head == null )
             throw new BufferUnderflowException();
 

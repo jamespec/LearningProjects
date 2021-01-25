@@ -75,22 +75,26 @@ public class MyPriorityQueueTest
         long[] dequeueTimes = new long[1000];
         long startTime, endTime;
 
+        // Collect the times it takes to call enqueue.
+        // The 0th time in the array is the time when there are zero items in the queue.
+        // We start with an empty list and enqueue 1000 items.
         for( int i=0; i<1000; i++) {
             startTime = System.nanoTime();
-            q.enqueue(i, i);
+            q.enqueue(i, (int)(Math.random() * 10.0));
             endTime = System.nanoTime();
             enqueueTimes[i] = (endTime-startTime);
         }
 
+        // Since the queue is full (1000 items) we populate the times array backwards
         for( int i=0; i<1000; i++) {
             startTime = System.nanoTime();
             q.dequeue();
             endTime = System.nanoTime();
-            dequeueTimes[i] = (endTime-startTime);
+            dequeueTimes[999-i] = (endTime-startTime);
         }
 
-        fixOutliers(enqueueTimes);
-        fixOutliers(dequeueTimes);
+        while( fixOutliers(enqueueTimes) > 0 );
+        while( fixOutliers(dequeueTimes) > 0 );
 
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter("timings.txt"));
@@ -104,15 +108,23 @@ public class MyPriorityQueueTest
         }
     }
 
-    void fixOutliers( long[] values ) {
+    // Replace an item with the average of the surrounding elements if the item
+    // is 30% larger than average.  Return the number of changed elements.
+    int fixOutliers( long[] values ) {
         // Trivial algorithm to replace values that are more than double the average
         // of the 4 surrounding points with the average. Gets rid of crazy java spikes.
 
-        for(int i = 2; i < values.length-2; i++) {
-            long avg = (values[i-2]+values[i-1]+values[i+1]+values[i+2])/4;
-            if( Math.abs(values[i] - avg) > avg*1.2 ) {
+        int changeCount=0;
+        for(int i = 3; i < values.length-3; i++) {
+            long avg = (values[i-3]+values[i-2]+values[i-1]+values[i+1]+values[i+2]+values[i+3])/6;
+
+            // We should be using abs of the difference but because we know the anomalies never make
+            // the code run faster we'll only concern ourselve with point that are higher than norm.
+            if( values[i] - avg > avg*1.3 ) {
                 values[i] = avg;
+                changeCount++;
             }
         }
+        return changeCount;
     }
 }

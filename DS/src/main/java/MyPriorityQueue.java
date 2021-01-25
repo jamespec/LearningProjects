@@ -46,7 +46,8 @@ public class MyPriorityQueue<T>
         int highestIndex=head;
         int highestPriority = data[head].priority;
         for(int i=head; i<head+numEnqueued; i++) {
-            int index = i % size;
+            int index = (i % size);
+
             if( data[index].priority > highestPriority ) {
                 highestPriority = data[index].priority;
                 highestIndex    = index;
