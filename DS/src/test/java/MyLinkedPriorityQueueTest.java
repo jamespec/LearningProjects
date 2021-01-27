@@ -60,8 +60,8 @@ public class MyLinkedPriorityQueueTest
     @Test
     void enqueueDequeueSpeedTest() {
         pq = new MyLinkedPriorityQueue<>();
-        long[] enqueueTimes = new long[1000];
-        long[] dequeueTimes = new long[1000];
+        double[] enqueueTimes = new double[1000];
+        double[] dequeueTimes = new double[1000];
         long startTime, endTime;
 
         // Collect the times it takes to call enqueue.
@@ -72,14 +72,15 @@ public class MyLinkedPriorityQueueTest
             // The priority makes all the difference since it drives
             // where in the list a new item goes.
             // enqueuing in priority order makes enqueue O(1)
-            // enqueuing in reverse priority order makes it O(n) (worst case)
             // enqueuing in random priority show a graph showing the tendency for O(n)
-            // but unpredictable for any given operation.
+            // enqueuing in reverse priority order makes it O(n) (worst case)
+            // Therefore, by empirical evidence we call this O(n)
             // pq.enqueue(i, (int)(Math.random() * 1000.0));
+            pq.enqueue(i, (int)(Math.random() * 2.0));
             // pq.enqueue(i, 1000-i);
-            pq.enqueue(i, i);
+            // pq.enqueue(i, i);
             endTime = System.nanoTime();
-            enqueueTimes[i] = (endTime-startTime);
+            enqueueTimes[i] = (endTime-startTime)/1000.0;
         }
 
         // Since the queue is full (1000 items) we populate the times array backwards
@@ -87,41 +88,17 @@ public class MyLinkedPriorityQueueTest
             startTime = System.nanoTime();
             pq.dequeue();
             endTime = System.nanoTime();
-            dequeueTimes[999-i] = (endTime-startTime);
+            dequeueTimes[999-i] = (endTime-startTime)/1000.0;
         }
 
-        while( fixOutliers(enqueueTimes) > 0 );
-        while( fixOutliers(dequeueTimes) > 0 );
+        // See comment on the fixSpikes
+        // Needs to be called over and over since there can still be bad points after smoothing.
+        TestUtils.fixSpikes(enqueueTimes, 2.0);
+        while( TestUtils.fixSpikes(enqueueTimes, 0.20) > 0 );  // No body of while! weird!
+        TestUtils.fixSpikes(dequeueTimes, 2.0);
+        while( TestUtils.fixSpikes(dequeueTimes, 0.20) > 0 );
 
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("timings.txt"));
-            for( int i=0; i<1000; i++) {
-                out.write( enqueueTimes[i] + "\t" + dequeueTimes[i] + "\n");
-            }
-            out.close();
-            System.out.println("File created successfully");
-        }
-        catch (IOException e) {
-        }
-    }
-
-    // Replace an item with the average of the surrounding elements if the item
-    // is 30% larger than average.  Return the number of changed elements.
-    int fixOutliers( long[] values ) {
-        // Trivial algorithm to replace values that are more than double the average
-        // of the 4 surrounding points with the average. Gets rid of crazy java spikes.
-
-        int changeCount=0;
-        for(int i = 3; i < values.length-3; i++) {
-            long avg = (values[i-3]+values[i-2]+values[i-1]+values[i+1]+values[i+2]+values[i+3])/6;
-
-            // We should be using abs of the difference but because we know the anomalies never make
-            // the code run faster we'll only concern ourselve with point that are higher than norm.
-            if( values[i] - avg > avg*1.3 ) {
-                values[i] = avg;
-                changeCount++;
-            }
-        }
-        return changeCount;
+        String[] colNames = {"Enqueue", "Dequeue"};
+        TestUtils.writeDataPoints("timings.txt", colNames, enqueueTimes.length, enqueueTimes, dequeueTimes );
     }
 }

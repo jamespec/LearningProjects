@@ -1,5 +1,3 @@
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
-import java.util.LongSummaryStatistics;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -71,8 +68,10 @@ public class MyPriorityQueueTest
     @Test
     void enqueueDequeueSpeedTest() {
         q = new MyPriorityQueue<>(1000);
-        long[] enqueueTimes = new long[1000];
-        long[] dequeueTimes = new long[1000];
+
+        // Hold on to the elapsed times until they can be written to a file at the end.
+        double[] enqueueTimes = new double[1000];
+        double[] dequeueTimes = new double[1000];
         long startTime, endTime;
 
         // Collect the times it takes to call enqueue.
@@ -80,51 +79,25 @@ public class MyPriorityQueueTest
         // We start with an empty list and enqueue 1000 items.
         for( int i=0; i<1000; i++) {
             startTime = System.nanoTime();
-            q.enqueue(i, (int)(Math.random() * 10.0));
+            q.enqueue(i, (int)(Math.random() * 10.0) );  // enqueuing lowest priority first up to 1000  // );
             endTime = System.nanoTime();
-            enqueueTimes[i] = (endTime-startTime);
+            enqueueTimes[i] = (endTime-startTime)/1000.0;  // Store usecs
         }
 
         // Since the queue is full (1000 items) we populate the times array backwards
         for( int i=0; i<1000; i++) {
             startTime = System.nanoTime();
-            q.dequeue();
+            q.dequeue();  // Ignore the output for now, just testing speed.
             endTime = System.nanoTime();
-            dequeueTimes[999-i] = (endTime-startTime);
+            dequeueTimes[999-i] = (endTime-startTime)/1000.0;  // 999 - i fills the array backwards with the first dequeue going at the end.
         }
 
-        while( fixOutliers(enqueueTimes) > 0 );
-        while( fixOutliers(dequeueTimes) > 0 );
+        // See comment on the fixSpikes
+        // Needs to be called over and over since there can still be bad points after smoothing.
+        while( TestUtils.fixSpikes(enqueueTimes, 0.20) > 0 );  // No body of while! weird!
+        while( TestUtils.fixSpikes(dequeueTimes, 0.20) > 0 );
 
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("timings.txt"));
-            for( int i=0; i<1000; i++) {
-                out.write( enqueueTimes[i] + "\t" + dequeueTimes[i] + "\n");
-            }
-            out.close();
-            System.out.println("File created successfully");
-        }
-        catch (IOException e) {
-        }
-    }
-
-    // Replace an item with the average of the surrounding elements if the item
-    // is 30% larger than average.  Return the number of changed elements.
-    int fixOutliers( long[] values ) {
-        // Trivial algorithm to replace values that are more than double the average
-        // of the 4 surrounding points with the average. Gets rid of crazy java spikes.
-
-        int changeCount=0;
-        for(int i = 3; i < values.length-3; i++) {
-            long avg = (values[i-3]+values[i-2]+values[i-1]+values[i+1]+values[i+2]+values[i+3])/6;
-
-            // We should be using abs of the difference but because we know the anomalies never make
-            // the code run faster we'll only concern ourselve with point that are higher than norm.
-            if( values[i] - avg > avg*1.3 ) {
-                values[i] = avg;
-                changeCount++;
-            }
-        }
-        return changeCount;
+        String[] colNames = {"Enqueue", "Dequeue"};
+        TestUtils.writeDataPoints("timings.txt", colNames, enqueueTimes.length, enqueueTimes, dequeueTimes );
     }
 }
