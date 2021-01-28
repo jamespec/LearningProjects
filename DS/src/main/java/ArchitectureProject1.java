@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
+
 import java.util.Scanner;
 
 public class ArchitectureProject1
@@ -5,75 +7,52 @@ public class ArchitectureProject1
     static byte myFirstInitial = 'J';
     static byte myLastInitial = 'P';
 
-    // ^ is the bitwise Exclusive OR (XOR) operator
-    // for each bit, if one of the bits is a 1 but not both the output is a 1.
-    // Said another way: from each bit, if the bits are different the output is a 1 else 0.
-    // e.g  0b1010 1010 ^
-    //      0b0110 1100 =
-    //      ------------
-    //      0b1100 0110
-    // So, zero in each place means they match!
-    // Counts the zero to know how many bits match.
-
-    static int firstInitialMatches( int arg )
-    {
-        int xord = (arg ^ myFirstInitial);
-        int zeroCount = countZeros(xord);
-
-        System.out.println( "\"" + (char)(arg) + "\": " + formatBits(arg, 8)
-                + " \"" + (char)(myFirstInitial) + "\": " + formatBits(myFirstInitial, 8)
-                + " XOR: " + formatBits(xord, 8)
-                + " zeroCount: " + zeroCount );
-
-        return zeroCount;
-    }
-
-    static int lastInitialMatches( int arg )
-    {
-        int xord = (arg ^ myLastInitial);
-        int zeroCount = countZeros(xord);
-
-        System.out.println("\"" + (char)arg + "\": " + formatBits(arg, 8)
-                + " \"" + (char)(myLastInitial) + "\": " + formatBits(myLastInitial, 8)
-                + " XOR: " + formatBits(xord, 8)
-                + " zeroCount: " + zeroCount );
-
-        return zeroCount;
-    }
-
-    static int countZeros( int arg )
+    // Compare the lowest order 8 bits between arg1 and arg2
+    // return the number of matches.
+    static int countMatches( int arg1, int arg2 )
     {
         int mask = 0b00000001;
-        int zeroCount = 0;
-
+        int matchCount=0;
         for(int i=0; i<8; i++) {
-            // Single & is the bitwise AND operator.
-            // Each bit is ANDed and the output is a 1 only if both bits are a 1
-            if ((arg & mask) == 0)
-                zeroCount++;
+            if( (arg1 & mask) == (arg2 & mask) )
+                matchCount++;
 
-            // This says to shift the bits of mask left by 1 place, mask = (mask << 1)
-            // e.g. 0b00000001 becomes 0b00000010, called again: 0b00000100, then 0b00001000
             mask <<= 1;
         }
-
-        return zeroCount;
+        return matchCount;
     }
 
     static String formatBits(int arg, int size)
     {
+        if( size > 32 )
+            throw new ValueException("Max of 32 bit width");
+
+        String zeros = "00000000000000000000000000000000";
         String value = Integer.toBinaryString(arg);
-        char[] format = new char[ Math.max(size, value.length())+2];
 
-        format[0] = '0';
-        format[1] = 'b';
-        for( int i=2; i<size+2; i++)
-            format[i] = '0';
+        return "0b" + zeros.substring(0, size - value.length()) + value;
+    }
 
-        for( int i=1; i<=value.length(); i++ )
-            format[format.length-i] = value.charAt(value.length()-i);
+    static int firstInitialMatches( int arg )
+    {
+        int matchCount = countMatches( arg, myFirstInitial);
 
-        return new String( format );
+        System.out.println( "\"" + (char)(arg) + "\": " + formatBits(arg, 8)
+                + " \"" + (char)(myFirstInitial) + "\": " + formatBits(myFirstInitial, 8)
+                + " matchCount: " + matchCount );
+
+        return matchCount;
+    }
+
+    static int lastInitialMatches( int arg )
+    {
+        int matchCount = countMatches( arg, myLastInitial);
+
+        System.out.println( "\"" + (char)(arg) + "\": " + formatBits(arg, 8)
+                + " \"" + (char)(myLastInitial) + "\": " + formatBits(myLastInitial, 8)
+                + " matchCount: " + matchCount );
+
+        return matchCount;
     }
 
     public static void main(String[] args)
@@ -97,10 +76,10 @@ public class ArchitectureProject1
             int matchesSecondLetterToFirstInitial = ArchitectureProject1.firstInitialMatches(entry.charAt(1));
             int matchesSecondLetterToLastInitial = ArchitectureProject1.lastInitialMatches(entry.charAt(1));
 
-            System.out.println("Matches, first letter to first initial: " + matchesFirstLetterToFirstInitial);
-            System.out.println("Matches, first letter to Last initial: " + matchesFirstLetterToLastInitial);
-            System.out.println("Matches, second letter to first initial: " + matchesSecondLetterToFirstInitial);
-            System.out.println("Matches, second letter to last initial: " + matchesSecondLetterToLastInitial);
+            System.out.println("Matches, first input to first initial: " + matchesFirstLetterToFirstInitial);
+            System.out.println("Matches, first input to Last initial: " + matchesFirstLetterToLastInitial);
+            System.out.println("Matches, second input to first initial: " + matchesSecondLetterToFirstInitial);
+            System.out.println("Matches, second input to last initial: " + matchesSecondLetterToLastInitial);
 
             if( matchesFirstLetterToFirstInitial == 8 && matchesSecondLetterToLastInitial == 8 ) {
                 System.out.println("My initials!");

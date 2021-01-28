@@ -1,23 +1,19 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MyPriorityQueueTest
+public class MyHeapPriorityQueueTest
 {
-    MyPriorityQueue<Integer> q;
+    MyHeapPriorityQueue q;
     int out;
 
     @BeforeEach
     void init() {
-        q = new MyPriorityQueue<>(5);
+        q = new MyHeapPriorityQueue(5);
     }
 
     @Test
@@ -68,7 +64,7 @@ public class MyPriorityQueueTest
 
     @Test
     void enqueueDequeueSpeedTest() {
-        q = new MyPriorityQueue<>(1000);
+        q = new MyHeapPriorityQueue(1000);
 
         // Hold on to the elapsed times until they can be written to a file at the end.
         double[] enqueueTimes = new double[1000];

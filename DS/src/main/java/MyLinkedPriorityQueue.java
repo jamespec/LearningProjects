@@ -17,14 +17,14 @@ public class MyLinkedPriorityQueue<T>
     Node<T> head =null;
 
     // Add an item to the Priority Queue by Priority
-    // It will be places as the last of a group with the same priority.
+    // It will be placed as the last of a group with the same priority.
     void enqueue( T v, int priority ) {
         if( head == null || priority < head.priority ) {
             head = new Node<>(v, priority, head);
         }
         else {
             Node<T> current = head;
-            while (current.next != null && current.next.priority <= priority)
+            while (current.next != null && current.next.priority > priority)
                 current = current.next;
 
             current.next = new Node<>(v, priority, current.next);

@@ -76,9 +76,9 @@ public class MyLinkedPriorityQueueTest
             // enqueuing in reverse priority order makes it O(n) (worst case)
             // Therefore, by empirical evidence we call this O(n)
             // pq.enqueue(i, (int)(Math.random() * 1000.0));
-            pq.enqueue(i, (int)(Math.random() * 2.0));
+            // pq.enqueue(i, (int)(Math.random() * 2.0));
             // pq.enqueue(i, 1000-i);
-            // pq.enqueue(i, i);
+            pq.enqueue(i, i);
             endTime = System.nanoTime();
             enqueueTimes[i] = (endTime-startTime)/1000.0;
         }
