@@ -15,7 +15,7 @@ public class ConsumerDemo {
         Logger logger = LoggerFactory.getLogger(ConsumerDemo.class.getName());
 
         String bookstrapServer = "localhost:9092";
-        String groupId = "my-second-application";
+        String groupId = "my-third-application";
         String topic = "first_topic";
 
         Properties properties = new Properties();
