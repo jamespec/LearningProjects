@@ -4,10 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class ProducerDemo
 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         Logger logger = LoggerFactory.getLogger(ProducerDemo.class);
 
         Properties properties = new Properties();
@@ -17,8 +18,12 @@ public class ProducerDemo
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
+        String topic = "first_topic";
         for(int i=0; i<10; i++) {
-            ProducerRecord<String, String> record = new ProducerRecord<>("first_topic", "Hello, world: " + i);
+            String key = "id_" + i;
+            String value = "Hello, world: " + i;
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
+            logger.info("Key: " + key);
 
             producer.send(record, new Callback() {
                 @Override
@@ -30,7 +35,7 @@ public class ProducerDemo
                         logger.error("Error Producing: ", e);
                     }
                 }
-            });
+            });  // .get() will make synchronous to show alignment of key to partition.
         }
         producer.close();
     }
