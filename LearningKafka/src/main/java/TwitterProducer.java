@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 public class TwitterProducer {
     private final Logger logger = LoggerFactory.getLogger( TwitterProducer.class.getName());
 
-    private final String consumerKey = "qfNOO5sfsiSa1kd8GSXWZcEg6";
-    private final String consumerSecret = "TwW5FuvTVxoDZPgX869m7BTbJJ4eVctBIpGfGC8MhLfJ57Uh6Z";
-    private final String token = "1356656219495280643-esva9tpj9R8rWsJil9VqlXdtOBTPOo";
-    private final String secret = "bLY9PFSFHNqjpqVhT83yNzQfVvDLciKLuZTLYgRuJ3QJO";
+    private String consumerKey;
+    private String consumerSecret;
+    private String token;
+    private String secret;
 
     private final String kafkaBootstrapHost = "mac-mini.local:9092";
     private final String kafkaTopic = "twitter_tweets";
