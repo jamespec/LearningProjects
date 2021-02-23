@@ -4,4 +4,4 @@ venv/
 target/
 out/
 .DS_Store
-
+twitter.properties
