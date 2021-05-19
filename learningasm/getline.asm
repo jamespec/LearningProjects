@@ -1,7 +1,7 @@
 
     ; This module defines _main and uses _
     ; getchar and _puts
-    ; Link with gcc to make the standard C library avilable
+    ; Link with gcc to make the standard C library available
     global  _main
     extern  _getchar
     extern  _putchar
