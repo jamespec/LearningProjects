@@ -5,3 +5,4 @@ target/
 out/
 .DS_Store
 twitter.properties
+*.iml
