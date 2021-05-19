@@ -1,0 +1,10 @@
+# Default ignored files
+.idea/
+*.o
+echoargs
+getline
+hello
+holamundo
+maxofthree
+power
+stars

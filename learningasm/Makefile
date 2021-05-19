@@ -1,8 +1,8 @@
 
-all: hello stars holamundo maxofthree echoargs power
+all: hello stars holamundo maxofthree echoargs power getline
 
 clean:
-	rm *.o hello stars holamundo
+	rm *.o hello stars holamundo maxofthree echoargs power getline
 
 hello: hello.o
 	ld -e start -static hello.o -o hello
@@ -25,6 +25,14 @@ holamundo: holamundo.o
 
 holamundo.o: holamundo.asm
 	nasm -fmacho64	holamundo.asm
+
+
+getline: getline.o
+	gcc getline.o -g -o getline -Wl,-no_pie
+
+getline.o: getline.asm
+	nasm -fmacho64 -g getline.asm
+
 
 maxofthree: maxofthree.o callmaxofthree.o
 	gcc maxofthree.o callmaxofthree.o -o maxofthree
